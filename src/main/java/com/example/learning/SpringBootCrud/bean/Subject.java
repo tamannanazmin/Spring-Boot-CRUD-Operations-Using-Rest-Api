@@ -1,4 +1,4 @@
-package com.xadmin.SpringBootCrud.bean;
+package com.example.learning.SpringBootCrud.bean;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
