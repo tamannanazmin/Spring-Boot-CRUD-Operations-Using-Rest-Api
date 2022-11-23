@@ -28,4 +28,11 @@ public class SubjectController {
     public void deleteSubject(@PathVariable String id){
         subjectService.deleteSubject(id);
     }
+
+    @RequestMapping("/subjects/{id}")
+    public Subject getSearchedSubject(@PathVariable String id){
+        return subjectService.getSearchedSubject(id);
+
+    }
+
 }

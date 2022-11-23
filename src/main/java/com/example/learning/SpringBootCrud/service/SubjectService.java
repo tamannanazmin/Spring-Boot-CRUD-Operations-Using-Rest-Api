@@ -18,7 +18,7 @@ public class SubjectService {
         return subjects;
     }
 
-    public void addSubject(Subject subject) {
+    public void addSubject(Subject subject)  {
         subjectRepo.save(subject);
     }
 
@@ -29,4 +29,12 @@ public class SubjectService {
     public void deleteSubject(String id) {
         subjectRepo.deleteById(id);
     }
+
+    public Subject getSearchedSubject(String id) {
+        return  getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
+    }
+
+    /*public void getSearchedSubject(String id){
+        getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
+    }*/
 }
