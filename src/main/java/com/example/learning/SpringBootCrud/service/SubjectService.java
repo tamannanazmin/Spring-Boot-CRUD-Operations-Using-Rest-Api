@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//all logical operations are handled here
 @Service
 public class SubjectService {
     @Autowired

@@ -3,7 +3,7 @@ package com.example.learning.SpringBootCrud.bean;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
-
+//Model or tables are creating here
 @Entity
 @Table(name = "Subject")
 public class Subject {
