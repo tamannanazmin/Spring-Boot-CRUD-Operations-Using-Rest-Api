@@ -1,6 +1,7 @@
 package com.example.learning.SpringBootCrud.controller;
 import com.example.learning.SpringBootCrud.service.SubjectService;
 import com.example.learning.SpringBootCrud.bean.Subject;
+import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +17,17 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/subjects")
-    public void addSubject(@RequestBody Subject subject ){
-        subjectService.addSubject(subject);
+    public ApiResponse addSubject(@RequestBody Subject subject ){
+        return subjectService.addSubject(subject);
     }
     @RequestMapping(method = RequestMethod.PUT, value = "/subjects/{id}")
-    public void updateSubject(@PathVariable String id, @RequestBody Subject subject ){
-        subjectService.updateSubject(id, subject);
+    public ApiResponse updateSubject(@PathVariable String id, @RequestBody Subject subject ){
+        return subjectService.updateSubject(id, subject);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/subjects/{id}")
-    public void deleteSubject(@PathVariable String id){
-        subjectService.deleteSubject(id);
+    public ApiResponse deleteSubject(@PathVariable String id){
+        return subjectService.deleteSubject(id);
     }
 
     @RequestMapping("/subjects/{id}")
