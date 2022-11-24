@@ -32,7 +32,17 @@ public class SubjectService {
             apiResponse.setStatus(404);
             apiResponse.setError("{id already exist}");
         }
+        else if(subject.getEmail() == null || subject.getEmail().isEmpty() || !Pattern.compile(emailRegex).matcher(subject.getEmail()).matches()){
+                apiResponse.setData("{}");
+                apiResponse.setStatus(404);
+                apiResponse.setError("{Invalid Email. Please Try again}");
+                }
 
+        else if(subject.getName().isEmpty()){
+                apiResponse.setData("{}");
+                apiResponse.setStatus(404);
+                apiResponse.setError("{Name Can not be Blank}");
+            }
         else {
                 subjectRepo.save(subject);
                 apiResponse.setData(subject);
