@@ -10,18 +10,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @SpringBootApplication
-public class LearningApplication  implements CommandLineRunner {
+public class LearningApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LearningApplication.class, args);
-	}
-	@Autowired
-	private SubjectRepository subjectRepository;
-	@Override
-	public void run(String... args) throws Exception {
-		Subject subject1 = new Subject();
-		subject1.setEmail("tamanna.naz98@gmail.com");
-		subject1.setName("Tamanna");
-
 	}
 }

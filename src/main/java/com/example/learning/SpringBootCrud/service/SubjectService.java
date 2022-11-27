@@ -4,7 +4,9 @@ import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.repository.SubjectRepository;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,39 +36,63 @@ public class SubjectService {
         subjectDto.setEmail(subject.getEmail());
         return subjectDto;
     }
-
-    public ApiResponse addSubject(Subject subject)  {
+    public ApiResponse addSubject(SubjectDto subjectDto)  {
         ApiResponse apiResponse = new ApiResponse();
-        String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        if(subjectRepo.existsById(subject.getId())){
-            apiResponse.setData("{}");
-            apiResponse.setStatus(404);
-            apiResponse.setError("{id already exist}");
-        }
-        else if(subject.getEmail() == null || subject.getEmail().isEmpty() || !Pattern.compile(emailRegex).matcher(subject.getEmail()).matches()){
-                apiResponse.setData("{}");
-                apiResponse.setStatus(404);
-                apiResponse.setError("{Invalid Email. Please Try again}");
-                }
-
-        else if(subject.getName().isEmpty()){
-                apiResponse.setData("{}");
-                apiResponse.setStatus(404);
-                apiResponse.setError("{Name Can not be Blank}");
-            }
-        else {
-                subjectRepo.save(subject);
-                apiResponse.setData(subject);
-                apiResponse.setStatus(200);
-                apiResponse.setError(null);
-            }
-
-
-
+        Subject subject = new Subject();
+        subject.setId(subjectDto.getId());
+        subject.setName(subjectDto.getName());
+        subject.setEmail(subjectDto.getEmail());
+        subjectRepo.save(subject);
+        apiResponse.setData(subject);
+        apiResponse.setStatus(200);
+        apiResponse.setError(null);
         return apiResponse;
     }
+    public ResponseEntity<SubjectDto> updateSubject(String id, Subject subject) {
+        subjectRepo.save(subject);
+        SubjectDto subjectDto = new SubjectDto();
+        BeanUtils.copyProperties(subject, subjectDto);
+        return ResponseEntity.ok(subjectDto);
+    }
+
+    public ResponseEntity<SubjectDto> deleteSubject(String id) {
+        SubjectDto subjectDto = new SubjectDto();
+        subjectRepo.deleteById(id);
+        return ResponseEntity.ok(subjectDto);
+    }
+
+//    public ApiResponse addSubject(Subject subject)  {
+//        ApiResponse apiResponse = new ApiResponse();
+//        String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+//                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+//        Pattern pattern = Pattern.compile(emailRegex);
+//        if(subjectRepo.existsById(subject.getId())){
+//            apiResponse.setData("{}");
+//            apiResponse.setStatus(404);
+//            apiResponse.setError("{id already exist}");
+//        }
+//        else if(subject.getEmail() == null || subject.getEmail().isEmpty() || !Pattern.compile(emailRegex).matcher(subject.getEmail()).matches()){
+//                apiResponse.setData("{}");
+//                apiResponse.setStatus(404);
+//                apiResponse.setError("{Invalid Email. Please Try again}");
+//                }
+//
+//        else if(subject.getName().isEmpty()){
+//                apiResponse.setData("{}");
+//                apiResponse.setStatus(404);
+//                apiResponse.setError("{Name Can not be Blank}");
+//            }
+//        else {
+//                subjectRepo.save(subject);
+//                apiResponse.setData(subject);
+//                apiResponse.setStatus(200);
+//                apiResponse.setError(null);
+//            }
+//
+//
+//
+//        return apiResponse;
+//    }
 
 //    public ApiResponse updateSubject(String id, Subject subject) {
 //        ApiResponse apiResponse = new ApiResponse();

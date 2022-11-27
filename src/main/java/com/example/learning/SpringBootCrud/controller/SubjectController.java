@@ -4,6 +4,7 @@ import com.example.learning.SpringBootCrud.service.SubjectService;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -22,19 +23,19 @@ public class SubjectController {
     public List<SubjectDto> getAllSubject(){
         return subjectService.getAllSubjects();
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/subjects")
-    public ApiResponse addSubject(@RequestBody Subject subject ){
-        return subjectService.addSubject(subject);
+    @PostMapping("/subjects")
+    public ApiResponse addSubject(@RequestBody SubjectDto subjectDto ){
+        return subjectService.addSubject(subjectDto);
     }
-//    @RequestMapping(method = RequestMethod.PUT, value = "/subjects/{id}")
-//    public ApiResponse updateSubject(@PathVariable String id, @RequestBody Subject subject ){
-//        return subjectService.updateSubject(id, subject);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/subjects/{id}")
-//    public ApiResponse deleteSubject(@PathVariable String id){
-//        return subjectService.deleteSubject(id);
-//    }
+    @PutMapping("/subjects/{id}")
+    public ResponseEntity<SubjectDto> updateSubject(@PathVariable String id, @RequestBody Subject subject ){
+        return subjectService.updateSubject(id, subject);
+    }
+
+    @DeleteMapping("/subjects/{id}")
+    public ResponseEntity<SubjectDto> deleteSubject(@PathVariable String id){
+        return subjectService.deleteSubject(id);
+    }
 
 //    @RequestMapping("/subjects/{id}")
 //    public Subject getSearchedSubject(@PathVariable String id){
