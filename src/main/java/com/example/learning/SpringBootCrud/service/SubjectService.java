@@ -1,5 +1,6 @@
 package com.example.learning.SpringBootCrud.service;
 
+import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.repository.SubjectRepository;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
@@ -10,16 +11,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 //all logical operations are handled here
 @Service
 public class SubjectService {
     @Autowired
     public SubjectRepository subjectRepo;
-    public List<Subject> getAllSubjects(){
-        List<Subject> subjects = new ArrayList<>();
-        subjectRepo.findAll().forEach(subjects::add);
-        return subjects;
+    public List<SubjectDto> getAllSubjects(){
+        //List<Subject> subjects = new ArrayList<>();
+        //subjectRepo.findAll().forEach(subjects::add);
+        //return subjects;
+        return subjectRepo.findAll()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+    //DTO using
+    private SubjectDto convertEntityToDto(Subject subject){
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setEmail(subject.getEmail());
+        return subjectDto;
     }
 
     public ApiResponse addSubject(Subject subject)  {
@@ -55,43 +68,43 @@ public class SubjectService {
         return apiResponse;
     }
 
-    public ApiResponse updateSubject(String id, Subject subject) {
-        ApiResponse apiResponse = new ApiResponse();
-        if(!subjectRepo.existsById(id)){
-            apiResponse.setData("{}");
-            apiResponse.setStatus(404);
-            apiResponse.setError("{Id does not exist}");
-        }
-        else {
-            subjectRepo.save(subject);
-            apiResponse.setData(subject);
-            apiResponse.setStatus(200);
-            apiResponse.setError(null);
+//    public ApiResponse updateSubject(String id, Subject subject) {
+//        ApiResponse apiResponse = new ApiResponse();
+//        if(!subjectRepo.existsById(id)){
+//            apiResponse.setData("{}");
+//            apiResponse.setStatus(404);
+//            apiResponse.setError("{Id does not exist}");
+//        }
+//        else {
+//            subjectRepo.save(subject);
+//            apiResponse.setData(subject);
+//            apiResponse.setStatus(200);
+//            apiResponse.setError(null);
+//
+//        }
+//        return apiResponse;
+//    }
+//
+//    public ApiResponse deleteSubject(String id) {
+//        ApiResponse apiResponse = new ApiResponse();
+//        if(!subjectRepo.existsById(id)){
+//            apiResponse.setData("{}");
+//            apiResponse.setStatus(404);
+//            apiResponse.setError("{Id does not exist}");
+//        }
+//        else {
+//            apiResponse.setData(subjectRepo.findById(id));
+//            apiResponse.setStatus(200);
+//            apiResponse.setError(null);
+//            subjectRepo.deleteById(id);
+//
+//        }
+//        return apiResponse;
+//    }
 
-        }
-        return apiResponse;
-    }
-
-    public ApiResponse deleteSubject(String id) {
-        ApiResponse apiResponse = new ApiResponse();
-        if(!subjectRepo.existsById(id)){
-            apiResponse.setData("{}");
-            apiResponse.setStatus(404);
-            apiResponse.setError("{Id does not exist}");
-        }
-        else {
-            apiResponse.setData(subjectRepo.findById(id));
-            apiResponse.setStatus(200);
-            apiResponse.setError(null);
-            subjectRepo.deleteById(id);
-
-        }
-        return apiResponse;
-    }
-
-    public Subject getSearchedSubject(String id) {
-        return  getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
-    }
+//    public Subject getSearchedSubject(String id) {
+//        return  getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
+//    }
 
     /*public void getSearchedSubject(String id){
         getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
