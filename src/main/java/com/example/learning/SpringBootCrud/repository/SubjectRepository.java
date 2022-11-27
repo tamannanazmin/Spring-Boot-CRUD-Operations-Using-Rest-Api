@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 //ekta interface jekhane CrudRepository add kora hoy
 public interface SubjectRepository extends JpaRepository<Subject, String> {
 
+
 }

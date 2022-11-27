@@ -5,6 +5,7 @@ import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import net.bytebuddy.implementation.bind.annotation.Empty;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Subject {
     @Column(name = "name", nullable = false)
     @NotNull
     private String name;
+    @Column(unique = true)
     private String email;
 
 
