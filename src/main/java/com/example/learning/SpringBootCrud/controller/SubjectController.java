@@ -28,12 +28,12 @@ public class SubjectController {
         return subjectService.addSubject(subjectDto);
     }
     @PutMapping("/subjects/{id}")
-    public ResponseEntity<SubjectDto> updateSubject(@PathVariable String id, @RequestBody Subject subject ){
-        return subjectService.updateSubject(id, subject);
+    public ApiResponse updateSubject(@PathVariable String id, @RequestBody SubjectDto subjectDto ){
+        return subjectService.updateSubject(id, subjectDto);
     }
 
     @DeleteMapping("/subjects/{id}")
-    public ResponseEntity<SubjectDto> deleteSubject(@PathVariable String id){
+    public ApiResponse deleteSubject(@PathVariable String id){
         return subjectService.deleteSubject(id);
     }
 
