@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 //URL and data collection are handled her
 @RestController
@@ -24,7 +25,7 @@ public class SubjectController {
         return subjectService.getAllSubjects();
     }
     @PostMapping("/subjects")
-    public ApiResponse addSubject(@RequestBody SubjectDto subjectDto ){
+    public ApiResponse addSubject(@Valid @RequestBody SubjectDto subjectDto ){
         return subjectService.addSubject(subjectDto);
     }
     @PutMapping("/subjects/{id}")

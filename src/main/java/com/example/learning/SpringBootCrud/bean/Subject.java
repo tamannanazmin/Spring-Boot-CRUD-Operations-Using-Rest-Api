@@ -25,9 +25,7 @@ import lombok.AllArgsConstructor;
 public class Subject {
     @Id
     private String id;
-
-    @Column(name = "name", nullable = false)
-    @NotNull
+    @Column(nullable = false)
     private String name;
     @Column(unique = true)
     private String email;
