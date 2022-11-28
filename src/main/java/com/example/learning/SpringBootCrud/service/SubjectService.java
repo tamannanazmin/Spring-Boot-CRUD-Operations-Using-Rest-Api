@@ -4,42 +4,35 @@ import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.repository.SubjectRepository;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 //all logical operations are handled here
 @Service
 public class SubjectService {
+
     @Autowired
     public SubjectRepository subjectRepo;
-    public List<SubjectDto> getAllSubjects(){
+
+    public List<SubjectDto> getAllSubjects() {
         //List<Subject> subjects = new ArrayList<>();
         //subjectRepo.findAll().forEach(subjects::add);
         //return subjects;
         return subjectRepo.findAll()
                 .stream()
-                .map(this::convertEntityToDto)
+                .map(SubjectDto::convertEntityToDto)
                 .collect(Collectors.toList());
     }
-    //DTO using
-    private SubjectDto convertEntityToDto(Subject subject){
-        SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setId(subject.getId());
-        subjectDto.setName(subject.getName());
-        subjectDto.setEmail(subject.getEmail());
-        return subjectDto;
-    }
 
-    public ApiResponse addSubject(SubjectDto subjectDto)  {
+//    public Subject createUser(Subject subject) {
+//        return subjectRepo.save(subject);
+//    }
+
+    public ApiResponse addSubject(SubjectDto subjectDto) {//TODO remove all the if else validation
         Subject subject = new Subject();
 
         subject.setId(subjectDto.getId());
