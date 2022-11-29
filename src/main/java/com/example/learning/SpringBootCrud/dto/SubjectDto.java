@@ -18,10 +18,10 @@ public class SubjectDto {
 
     @NotEmpty(message = "Name Can not be Empty")
     @Size(min = 2, message = "User name should have at least 2 characters")
-    @Pattern(regexp = "^[a-zA-Z]+", message = "Name is not correct")
+    @Pattern(regexp = "^[a-zA-Z]+", message = "Name is not correct, Enter again please")
     private String name;
 
-    @NotEmpty(message = "Name Can not be Empty")
+    @NotEmpty(message = "Email Can not be Empty")
     @Email(message = "Please enter valid email")
     private String email;
 

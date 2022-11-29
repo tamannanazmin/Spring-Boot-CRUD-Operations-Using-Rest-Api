@@ -1,4 +1,5 @@
 package com.example.learning.SpringBootCrud.controller;
+import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.service.SubjectService;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
@@ -45,9 +46,13 @@ public class SubjectController {
 
         return new ResponseEntity<SubjectDto>(subjectResponse, HttpStatus.CREATED);
     }*/
-
     @PostMapping("/subjects")
     public ApiResponse addSubject(@Valid @RequestBody SubjectDto subjectDto) {
+        /*if(subjectService.exist(subjectDto.getEmail())== true){
+            return subjectService.addSubject(subjectDto.setEmail("Email exist"));
+        }else {
+            return subjectService.addSubject(subjectDto);
+        }*/
         return subjectService.addSubject(subjectDto);
     }
 

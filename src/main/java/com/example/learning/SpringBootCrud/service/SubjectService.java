@@ -5,9 +5,11 @@ import com.example.learning.SpringBootCrud.repository.SubjectRepository;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -19,28 +21,58 @@ public class SubjectService {
     public SubjectRepository subjectRepo;
 
     public List<SubjectDto> getAllSubjects() {
-        //List<Subject> subjects = new ArrayList<>();
-        //subjectRepo.findAll().forEach(subjects::add);
-        //return subjects;
         return subjectRepo.findAll()
                 .stream()
                 .map(SubjectDto::convertEntityToDto)
                 .collect(Collectors.toList());
     }
 
-//    public Subject createUser(Subject subject) {
-//        return subjectRepo.save(subject);
-//    }
-
-    public ApiResponse addSubject(SubjectDto subjectDto) {//TODO remove all the if else validation
+    public ApiResponse addSubject(SubjectDto subjectDto) { // TODO remove all the if else validation
         Subject subject = new Subject();
 
         subject.setId(subjectDto.getId());
         subject.setName(subjectDto.getName());
         subject.setEmail(subjectDto.getEmail());
-
-
         ApiResponse apiResponse = new ApiResponse();
+        if(this.findByEmail(subject.getEmail())==null){
+            subjectRepo.save(subject);
+        }
+        else {
+            apiResponse.setError("{email already exist, Enter another email}");
+            return apiResponse;
+        }
+        apiResponse.setData(subject);
+        apiResponse.setStatus(200);
+        return apiResponse;
+
+        /*try {
+            subjectRepo.save(subject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiResponse.setStatus(404);
+             if (e.getMessage().contains("UK_")) {
+                 apiResponse.setError("{email already exist}");
+                 return apiResponse;
+             } else {
+                 apiResponse.setError(e.getMessage());
+             }
+             return apiResponse;
+        }*/
+//        try {
+//        if(this.findByEmail(subject.getEmail())==null){
+//        } catch (DataIntegrityViolationException de) {
+//            de.printStackTrace();
+//            apiResponse.setError("{email already exist}");
+//            return apiResponse;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            apiResponse.setStatus(404);
+//            apiResponse.setError(e.getMessage());
+//            return apiResponse;
+//        }
+
+
+        /*ApiResponse apiResponse = new ApiResponse();
         String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -66,7 +98,7 @@ public class SubjectService {
             apiResponse.setStatus(200);
             apiResponse.setError(null);
         }
-        return apiResponse;
+        return apiResponse;*/
     }
 
     public ApiResponse updateSubject(String id, SubjectDto subjectDto) {
@@ -109,12 +141,11 @@ public class SubjectService {
         }
         return apiResponse;
     }
+    public Subject findByEmail(String email){
+        return subjectRepo.findByEmail(email).orElse(null);
+    }
 
-//    public Subject getSearchedSubject(String id) {
-//        return  getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
-//    }
-
-    /*public void getSearchedSubject(String id){
-        getAllSubjects().stream().filter(t -> t.getId().equals(id)).findFirst().get();
-    }*/
+    public boolean exist(String email){
+        return subjectRepo.existsByEmail(email);
+    }
 }
