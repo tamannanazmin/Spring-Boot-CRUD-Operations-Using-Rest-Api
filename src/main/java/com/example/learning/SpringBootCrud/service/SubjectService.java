@@ -27,7 +27,7 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
-    public ApiResponse addSubject(SubjectDto subjectDto) { // TODO remove all the if else validation
+    public ApiResponse addSubject(SubjectDto subjectDto) {
         Subject subject = new Subject();
 
         subject.setId(subjectDto.getId());
@@ -35,6 +35,7 @@ public class SubjectService {
         subject.setEmail(subjectDto.getEmail());
         ApiResponse apiResponse = new ApiResponse();
         if(this.findByEmail(subject.getEmail())==null){
+
             subjectRepo.save(subject);
         }
         else {

@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 public class Subject {
 
     @Id
-    private String id;//TODO AUTO GENERATE ID
+    private String id;
 
     @Column(nullable = false)
     private String name;

@@ -25,6 +25,9 @@ public class SubjectDto {
     @Email(message = "Please enter valid email")
     private String email;
 
+//    @NotEmpty(message = "text Can not be Empty")
+//    private String test;
+
 
     //DTO using
     public static SubjectDto convertEntityToDto(Subject subject) {
