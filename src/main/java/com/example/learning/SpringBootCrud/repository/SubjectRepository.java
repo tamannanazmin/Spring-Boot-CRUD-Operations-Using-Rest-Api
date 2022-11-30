@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface SubjectRepository extends JpaRepository<Subject, String> {
     public boolean existsByEmail(String email);
     Optional<Subject> findByEmail(String email);
+
+
+    //boolean selectExistsEmail(String email);
 }
