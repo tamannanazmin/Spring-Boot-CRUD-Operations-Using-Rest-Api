@@ -11,5 +11,5 @@ public interface SubjectRepository extends JpaRepository<Subject, String> {
     Optional<Subject> findByEmail(String email);
 
 
-    //boolean selectExistsEmail(String email);
+    //shift+ctrl+t to create test class
 }
