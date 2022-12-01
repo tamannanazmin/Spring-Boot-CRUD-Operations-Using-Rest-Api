@@ -29,6 +29,8 @@ dependencies {
 	/** h2 database dependencies */
 	compileOnly group: 'com.h2database', name: 'h2', version: '1.3.148'
 	testImplementation group: 'com.h2database', name: 'h2', version: '1.4.192'
+	//mockito
+	compileOnly group: 'org.mockito', name: 'mockito-core', version: '2.23.4'
 
 }
 
