@@ -12,31 +12,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
     private SubjectRepository subjectRepository;
     private  SubjectService subjectService;
-    AutoCloseable autoCloseable;
+    private Subject subject;
+    //AutoCloseable autoCloseable;
     @BeforeEach
     void setUp() {
-        AutoCloseable autoCloseable = MockitoAnnotations.openMocks(this);
+        subject.setId("1");
+        subject.setEmail("abc@gmail.com");
+        subject.setName("ABC");
+    }
+    // JUnit test for saveEmployee method
+    @DisplayName("JUnit test for saveEmployee method")
+    @Test
+    public void getAllSubjectsEmail(){
+        // given - precondition or setup
+        given(subjectRepository.findByEmail(subject.getEmail()))
+                .willReturn(Optional.empty());
 
-        this.subjectService = new SubjectService(this.subjectRepository);
+        given(subjectRepository.save(subject)).willReturn(subject);
+
+        System.out.println(subjectRepository);
+        System.out.println(subjectService);
+
+        // when -  action or the behaviour that we are going test
+        Subject savedSubject = subjectService.savedSubject(subject);
+
+        System.out.println(savedSubject);
+        // then - verify the output
+        assertThat(savedSubject).isNotNull();
     }
 
-    @AfterEach
-    void tearDown() {
-        try{
-            this.autoCloseable.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     @Test
     void getAllSubjects(){

@@ -152,4 +152,6 @@ public class SubjectService {
     public boolean exist(String email){
         return subjectRepo.existsByEmail(email);
     }
+
+
 }
