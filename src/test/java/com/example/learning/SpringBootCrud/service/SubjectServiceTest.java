@@ -2,6 +2,7 @@ package com.example.learning.SpringBootCrud.service;
 import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.repository.SubjectRepository;
+import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,49 +19,49 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
     private SubjectRepository subjectRepository;
+
+    @InjectMocks
     private  SubjectService subjectService;
-    private Subject subject;
+    private SubjectDto subjectDto;
     //AutoCloseable autoCloseable;
     @BeforeEach
     void setUp() {
+        subjectDto= subjectDto.builder()
+                .id("1")
+                .name("tamanna")
+                .email("tama@gmail.com")
+                .build();
+    }
+    // JUnit test for saveEmployee method
+    @DisplayName("JUnit test method")
+    @Test
+    public void getAllSubjects(){
+        List<Subject> subjects = new ArrayList<>();
+        Subject subject = new Subject();
         subject.setId("1");
         subject.setEmail("abc@gmail.com");
         subject.setName("ABC");
-    }
-    // JUnit test for saveEmployee method
-    @DisplayName("JUnit test for saveEmployee method")
-    @Test
-    public void getAllSubjectsEmail(){
-        // given - precondition or setup
-        given(subjectRepository.findByEmail(subject.getEmail()))
-                .willReturn(Optional.empty());
+        subjects.add(subject);
 
-        given(subjectRepository.save(subject)).willReturn(subject);
+        when(subjectRepository.findAll()).thenReturn(subjects);
+        //when
+        List<SubjectDto> subjectDto = subjectService.getAllSubjects();
+        //then
+        assert subjectDto.size() == 1;
 
-        System.out.println(subjectRepository);
-        System.out.println(subjectService);
+        /*verify(subjectRepo).findAll()
+                .stream()
+                .map(SubjectDto::convertEntityToDto)
+                .collect(Collectors.toList());*/
 
-        // when -  action or the behaviour that we are going test
-        Subject savedSubject = subjectService.savedSubject(subject);
-
-        System.out.println(savedSubject);
-        // then - verify the output
-        assertThat(savedSubject).isNotNull();
     }
 
-
-    @Test
-    void getAllSubjects(){
-        subjectService.getAllSubjects();
-        verify(subjectRepository).findAll();
-    }
 //    @Mock private SubjectRepository subjectRepo;
 //
 //    @InjectMocks
@@ -100,8 +101,21 @@ class SubjectServiceTest {
 //
 
     @Test
-    @Disabled//this method won't run
+    //@Disabled//this method won't run
     void addSubject() {
+
+        Subject subject = new Subject("1","tamanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(200, subject, null);
+
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+
+        subjectService.addSubject(subjectDto);
+        assertThat(subjectService.addSubject(subjectDto).getData()).isEqualTo(apiResponse.getData());
+
+
     }
 
     @Test

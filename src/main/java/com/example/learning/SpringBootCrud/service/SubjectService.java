@@ -19,9 +19,9 @@ public class SubjectService {
 
     @Autowired
     public SubjectRepository subjectRepo;
-    public SubjectService(SubjectRepository subjectRepo){
-        this.subjectRepo=subjectRepo;
-    }
+//    public SubjectService(SubjectRepository subjectRepo){
+//        this.subjectRepo=subjectRepo;
+//    }
 
     public List<SubjectDto> getAllSubjects() {
         return subjectRepo.findAll()
