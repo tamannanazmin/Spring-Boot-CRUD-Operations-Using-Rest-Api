@@ -154,6 +154,18 @@ class SubjectServiceTest {
     @Test
     @Disabled//this method won't run
     void deleteSubject() {
+        Subject subject = new Subject("1","tanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(200, subject, null);
+
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+
+        when(subjectRepository.save(subject)).thenReturn(new Subject());
+        subjectService.updateSubject(subjectDto.getId(),subjectDto);
+        assertThat(subjectService.updateSubject(subjectDto.getId(), subjectDto).getData()).isEqualTo(apiResponse.getData());
+
     }
 
     @Test
