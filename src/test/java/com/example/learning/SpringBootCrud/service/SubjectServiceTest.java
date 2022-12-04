@@ -112,15 +112,43 @@ class SubjectServiceTest {
         subjectDto.setName(subject.getName());
         subjectDto.setEmail(subject.getEmail());
 
-        subjectService.addSubject(subjectDto);
+        //subjectService.addSubject(subjectDto);
+
+        when(subjectRepository.save(subject)).thenReturn(subject);
         assertThat(subjectService.addSubject(subjectDto).getData()).isEqualTo(apiResponse.getData());
 
+
+//        List<Subject> subjects = new ArrayList<>();
+//        Subject subject = new Subject();
+//        subject.setId("1");
+//        subject.setEmail("abc@gmail.com");
+//        subject.setName("ABC");
+//        subjects.add(subject);
+//        when(subjectRepository.save(subject)).thenReturn(subject);
+
+        //assertThat(subjectService.addSubject(subject)).isEqualTo(subject);
+
+
+
+        //when
+         //List<SubjectDto> subjectDto = subjectService.addSubject();
+        //then
+        //assert subjectDto.size() == 1;
 
     }
 
     @Test
-    @Disabled//this method won't run
     void updateSubject() {
+        Subject subject = new Subject("1","tanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(200, subject, null);
+
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+        when(subjectRepository.save(subject)).thenReturn(subject);
+        subjectService.addSubject(subjectDto);
+        assertThat(subjectService.updateSubject(subjectDto.getId(), subjectDto).getData()).isEqualTo(apiResponse.getData());
     }
 
     @Test
