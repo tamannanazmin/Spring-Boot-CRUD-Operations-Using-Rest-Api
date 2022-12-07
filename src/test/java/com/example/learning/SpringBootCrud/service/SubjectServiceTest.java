@@ -32,7 +32,7 @@ class SubjectServiceTest {
     @InjectMocks
     private  SubjectService subjectService;
     private SubjectDto subjectDto;
-    
+
     @DisplayName("JUnit test method")
     @Test
     public void getAllSubjects(){
