@@ -32,81 +32,76 @@ class SubjectServiceTest {
     @InjectMocks
     private  SubjectService subjectService;
     private SubjectDto subjectDto;
-    //AutoCloseable autoCloseable;
-    @BeforeEach
-    void setUp() {
-        subjectDto= subjectDto.builder()
-                .id("1")
-                .name("tamanna")
-                .email("tama@gmail.com")
-                .build();
-    }
-    // JUnit test for saveEmployee method
+    
     @DisplayName("JUnit test method")
     @Test
     public void getAllSubjects(){
         List<Subject> subjects = new ArrayList<>();
         Subject subject = new Subject();
         subject.setId("1");
-        subject.setEmail("abc@gmail.com");
-        subject.setName("ABC");
+        subject.setEmail("as@gmail.com");
+        subject.setName("tamanna");
         subjects.add(subject);
 
         when(subjectRepository.findAll()).thenReturn(subjects);
         //when
         List<SubjectDto> subjectDto = subjectService.getAllSubjects();
+        System.out.println("get all data"+subjectDto);
         //then
-        assert subjectDto.size() == 1;
-
-        /*verify(subjectRepo).findAll()
-                .stream()
-                .map(SubjectDto::convertEntityToDto)
-                .collect(Collectors.toList());*/
-
     }
-
-//    @Mock private SubjectRepository subjectRepo;
-//
-//    @InjectMocks
-//    private SubjectService underTest;
-//
-//    @BeforeEach
-//    void setUp(){
-//        //autoCloseable = MockitoAnnotations.openMocks(this);
-//        //underTest = new SubjectService();
-//    }
-////    @AfterEach
-////    void tearDown() throws Exception {
-////        autoCloseable.close();
-////    }
-//
-//    @Test
-//    //@Disabled//this method won't run
-//    void canGetAllSubjects() {
-//        List<Subject> subjects = new ArrayList<>();
-//        Subject subject = new Subject();
-//        subject.setId(String.valueOf(1));
-//        subject.setEmail("abc@gmail.com");
-//        subject.setName("ABC");
-//        subjects.add(subject);
-//
-//        when(subjectRepo.findAll()).thenReturn(subjects);
-//        //when
-//        List<SubjectDto> subjectDtos = underTest.getAllSubjects();
-//        //then
-//        assert subjectDtos.size() == 1;
-//        /*verify(subjectRepo).findAll()
-//                .stream()
-//                .map(SubjectDto::convertEntityToDto)
-//                .collect(Collectors.toList());*/
-//
-//    }
-//
 
     @Test
     //@Disabled//this method won't run
     void addSubject() {
+        Subject subject = new Subject("4","tamanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(200, subject, null);
 
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+
+        when(subjectRepository.save(subject)).thenReturn(subject);
+        assertThat(subjectService.addSubject(subjectDto).getData()).isEqualTo(apiResponse.getData());
+    }
+
+    @Test
+    //@Disabled
+    void ShouldNotUpdateSubjectIfNotFound() {
+        Subject subject = new Subject();
+        ApiResponse apiResponse= new ApiResponse(404, "{}", "{id does not exist}");
+
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+
+        when(subjectRepository.save(subject)).thenReturn(subject);
+        when(subjectRepository.existsById(subjectDto.getId())).thenReturn(false);
+
+        ApiResponse actualResponse = subjectService.updateSubject(subjectDto.getId(), subjectDto);
+        assertThat(actualResponse.getStatus()).isEqualTo(apiResponse.getStatus());
+    }
+    @Test
+        //@Disabled
+    void ShouldUpdateSubjectIfFound() {
+        Subject subject = new Subject("1","tanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(200, subject, null);
+
+        SubjectDto subjectDto = new SubjectDto();
+        subjectDto.setId(subject.getId());
+        subjectDto.setName(subject.getName());
+        subjectDto.setEmail(subject.getEmail());
+
+        when(subjectRepository.save(subject)).thenReturn(subject);
+        when(subjectRepository.existsById(subjectDto.getId())).thenReturn(true);
+        subjectService.addSubject(subjectDto);
+        ApiResponse actualResponse = subjectService.updateSubject(subjectDto.getId(), subjectDto);
+        assertThat(actualResponse.getData()).isEqualTo(apiResponse.getData());
+    }
+    @Test
+   // @Disabled//this method won't run
+    void ShouldDeleteSubjectIfFound() {
         Subject subject = new Subject("1","tamanna","tamanna.naz@gmail.com");
         ApiResponse apiResponse= new ApiResponse(200, subject, null);
 
@@ -115,52 +110,16 @@ class SubjectServiceTest {
         subjectDto.setName(subject.getName());
         subjectDto.setEmail(subject.getEmail());
 
-        //subjectService.addSubject(subjectDto);
-
-        when(subjectRepository.save(subject)).thenReturn(subject);
-        assertThat(subjectService.addSubject(subjectDto).getData()).isEqualTo(apiResponse.getData());
-
-
-//        List<Subject> subjects = new ArrayList<>();
-//        Subject subject = new Subject();
-//        subject.setId("1");
-//        subject.setEmail("abc@gmail.com");
-//        subject.setName("ABC");
-//        subjects.add(subject);
-//        when(subjectRepository.save(subject)).thenReturn(subject);
-
-        //assertThat(subjectService.addSubject(subject)).isEqualTo(subject);
-
-
-
-        //when
-         //List<SubjectDto> subjectDto = subjectService.addSubject();
-        //then
-        //assert subjectDto.size() == 1;
-
-    }
-
-    @Test
-    //@Disabled
-    void ShouldNotUpdateSubjectIfNotFound() {
-        Subject subject = new Subject("1","tanna","tamanna.naz@gmail.com");
-        ApiResponse apiResponse= new ApiResponse(200, subject, null);
-
-        SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setId(subject.getId());
-        subjectDto.setName(subject.getName());
-        subjectDto.setEmail(subject.getEmail());
-        when(subjectRepository.save(subject)).thenReturn(subject);
+        when(subjectRepository.save(subject)).thenReturn(new Subject());
+        when(subjectRepository.existsById(subjectDto.getId())).thenReturn(true);
         subjectService.addSubject(subjectDto);
-        assertThat(subjectService.updateSubject(subjectDto.getId(), subjectDto).getData()).isNotEqualTo(apiResponse.getData());
-
+        assertThat(subjectService.deleteSubject(subjectDto.getId()).getStatus()).isEqualTo(apiResponse.getStatus());
     }
-
     @Test
-   // @Disabled//this method won't run
+        // @Disabled//this method won't run
     void ShouldNotDeleteSubjectIfNotFound() {
-        Subject subject = new Subject("1","tanna","tamanna.naz@gmail.com");
-        ApiResponse apiResponse= new ApiResponse(200, subject, null);
+        Subject subject = new Subject("1","tamanna","tamanna.naz@gmail.com");
+        ApiResponse apiResponse= new ApiResponse(404, "{}", "{id does not exist}");
 
         SubjectDto subjectDto = new SubjectDto();
         subjectDto.setId(subject.getId());
@@ -168,9 +127,9 @@ class SubjectServiceTest {
         subjectDto.setEmail(subject.getEmail());
 
         when(subjectRepository.save(subject)).thenReturn(new Subject());
-        subjectService.updateSubject(subjectDto.getId(),subjectDto);
-        assertThat(subjectService.updateSubject(subjectDto.getId(), subjectDto).getData()).isNotEqualTo(apiResponse.getData());
-
+        when(subjectRepository.existsById(subjectDto.getId())).thenReturn(false);
+        subjectService.addSubject(subjectDto);
+        assertThat(subjectService.deleteSubject(subjectDto.getId()).getStatus()).isEqualTo(apiResponse.getStatus());
     }
 
     @Test

@@ -134,7 +134,7 @@ public class SubjectService {
         if(!subjectRepo.existsById(id)){
             apiResponse.setData("{}");
             apiResponse.setStatus(404);
-            apiResponse.setError("{Id does not exist}");
+            apiResponse.setError("{id does not exist}");
         }
         else {
             apiResponse.setData(subjectRepo.findById(id));
