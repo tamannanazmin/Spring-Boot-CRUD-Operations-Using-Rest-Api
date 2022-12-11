@@ -103,7 +103,7 @@ class SubjectControllerUnitTest {
     private SubjectService subjectService;
 
     @Test
-    public void addSubjectTest() throws Exception{
+    public void ShouldAddSubjectIfFound() throws Exception{
         SubjectDto subjectDto= new SubjectDto();
         subjectDto.setId("23");
         subjectDto.setName("tama");
@@ -125,6 +125,30 @@ class SubjectControllerUnitTest {
         System.out.println(response.getErrorMessage());
         assertEquals(apiResponse.getError(), response.getErrorMessage());
     }
+    @Test
+    public void ShouldNotAddSubjectIfNameHasLessThanTwoCharacter() throws Exception{
+        SubjectDto subjectDto= new SubjectDto();
+        subjectDto.setId("23");
+        subjectDto.setName("tama");
+        subjectDto.setEmail("y@gmail.com");
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setData(subjectDto);
+        apiResponse.setStatus(200);
+        apiResponse.setError(null);
+
+        String URI = "/subjects";
+        Mockito.when(subjectService.addSubject(Mockito.any(SubjectDto.class))).thenReturn(apiResponse);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        System.out.println(response.getErrorMessage());
+        assertEquals(apiResponse.getError(), response.getErrorMessage());
+    }
+
 
     @Test
     public void getAllSubjectTest() throws Exception {
