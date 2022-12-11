@@ -4,6 +4,7 @@ import com.example.learning.SpringBootCrud.bean.Subject;
 import com.example.learning.SpringBootCrud.dto.SubjectDto;
 import com.example.learning.SpringBootCrud.service.SubjectService;
 import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,13 +20,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 ////@RunWith(SpringRunner.class)
 ////@WebMvcTest(value = SubjectController.class)
@@ -102,6 +110,9 @@ class SubjectControllerUnitTest {
     @MockBean
     private SubjectService subjectService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     public void ShouldAddSubjectIfFound() throws Exception{
         SubjectDto subjectDto= new SubjectDto();
@@ -118,35 +129,53 @@ class SubjectControllerUnitTest {
         String URI = "/subjects";
         Mockito.when(subjectService.addSubject(Mockito.any(SubjectDto.class))).thenReturn(apiResponse);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
 
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        System.out.println(response.getErrorMessage());
-        assertEquals(apiResponse.getError(), response.getErrorMessage());
+        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
+
+
+        //MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        //MockHttpServletResponse response = result.getResponse();
+        //assertEquals(apiResponse.getError(), response.getErrorMessage());
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("200"))
+                .andExpect(jsonPath("$.data.id", is(subjectDto.getId())))
+                .andExpect(jsonPath("$.data.name", is(subjectDto.getName())))
+                .andExpect(jsonPath("$.data.email", is(subjectDto.getEmail())))
+                .andExpect(jsonPath("$.error").value(nullValue()));
     }
     @Test
     public void ShouldNotAddSubjectIfNameHasLessThanTwoCharacter() throws Exception{
         SubjectDto subjectDto= new SubjectDto();
         subjectDto.setId("23");
-        subjectDto.setName("tama");
+        subjectDto.setName("p");
         subjectDto.setEmail("y@gmail.com");
 
 
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setData(subjectDto);
-        apiResponse.setStatus(200);
-        apiResponse.setError(null);
+        apiResponse.setStatus(400);
+        apiResponse.setError("User name should have at least 2 characters");
 
         String URI = "/subjects";
-        Mockito.when(subjectService.addSubject(Mockito.any(SubjectDto.class))).thenReturn(apiResponse);
+        Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
+        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
 
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = result.getResponse();
-        System.out.println(response.getErrorMessage());
-        assertEquals(apiResponse.getError(), response.getErrorMessage());
+//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//        MockHttpServletResponse response = result.getResponse();
+//        System.out.println("hi error:"+response.getContentAsString());
+//        assertEquals(apiResponse.getError(), response.getErrorMessage());
+
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
+        response.andDo(print())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error").value("User name should have at least 2 characters"));
     }
 
 
