@@ -222,7 +222,50 @@ class SubjectControllerUnitTest {
                 .andExpect(jsonPath("$.status").value("400"))
                 .andExpect(jsonPath("$.error").value("Email Can not be Empty"));
     }
+    @Test
+    public void ShouldNotAddSubjectIfNameIsNotCorrect() throws Exception{
+        SubjectDto subjectDto= new SubjectDto();
+        subjectDto.setId("23");
+        subjectDto.setName("paaa$123");
+        subjectDto.setEmail("abc@gmail.com");
 
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setData(subjectDto);
+        apiResponse.setStatus(400);
+        apiResponse.setError("Name is not correct, Enter again please");
+
+        String URI = "/subjects";
+        Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
+        response.andDo(print())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error").value("Name is not correct, Enter again please"));
+    }
+    @Test
+    public void ShouldNotAddSubjectIfNameIsEmpty() throws Exception{
+        SubjectDto subjectDto= new SubjectDto();
+        subjectDto.setId("23");
+        subjectDto.setName(null);
+        subjectDto.setEmail("abc@gmail.com");
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setData(subjectDto);
+        apiResponse.setStatus(400);
+        apiResponse.setError("Name Can not be Empty");
+
+        String URI = "/subjects";
+        Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
+        response.andDo(print())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error").value("Name Can not be Empty"));
+    }
 
     @Test
     public void getAllSubjectTest() throws Exception {
