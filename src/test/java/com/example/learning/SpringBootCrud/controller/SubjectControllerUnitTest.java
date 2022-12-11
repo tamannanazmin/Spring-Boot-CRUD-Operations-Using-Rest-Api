@@ -162,20 +162,65 @@ class SubjectControllerUnitTest {
 
         String URI = "/subjects";
         Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
-        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
-
-
-//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-//        MockHttpServletResponse response = result.getResponse();
-//        System.out.println("hi error:"+response.getContentAsString());
-//        assertEquals(apiResponse.getError(), response.getErrorMessage());
-
         ResultActions response = mockMvc.perform(post("/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(subjectDto)));
         response.andDo(print())
                 .andExpect(jsonPath("$.status").value("400"))
                 .andExpect(jsonPath("$.error").value("User name should have at least 2 characters"));
+
+
+//        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI);
+//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//        MockHttpServletResponse response = result.getResponse();
+//        System.out.println("hi error:"+response.getContentAsString());
+//        assertEquals(apiResponse.getError(), response.getErrorMessage());
+
+
+    }
+    @Test
+    public void ShouldNotAddSubjectIfEmailIsNotValid() throws Exception{
+        SubjectDto subjectDto= new SubjectDto();
+        subjectDto.setId("23");
+        subjectDto.setName("paaa");
+        subjectDto.setEmail("yasdail.com");
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setData(subjectDto);
+        apiResponse.setStatus(400);
+        apiResponse.setError("Please enter valid email");
+
+        String URI = "/subjects";
+        Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
+        response.andDo(print())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error").value("Please enter valid email"));
+    }
+    @Test
+    public void ShouldNotAddSubjectIfEmailIsEmpty() throws Exception{
+        SubjectDto subjectDto= new SubjectDto();
+        subjectDto.setId("23");
+        subjectDto.setName("paaa");
+        subjectDto.setEmail("");
+
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setData(subjectDto);
+        apiResponse.setStatus(400);
+        apiResponse.setError("Email Can not be Empty");
+
+        String URI = "/subjects";
+        Mockito.when(subjectService.addSubject(subjectDto)).thenReturn(apiResponse);
+        ResultActions response = mockMvc.perform(post("/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(subjectDto)));
+        response.andDo(print())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.error").value("Email Can not be Empty"));
     }
 
 
