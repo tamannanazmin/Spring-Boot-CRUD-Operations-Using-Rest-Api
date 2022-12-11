@@ -45,7 +45,7 @@ class SubjectServiceTest {
 
         when(subjectRepository.findAll()).thenReturn(subjects);
         //when
-        List<SubjectDto> subjectDto = subjectService.getAllSubjects();
+        ApiResponse apiResponse = subjectService.getAllSubjects();
         System.out.println("get all data"+subjectDto);
         //then
     }

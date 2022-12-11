@@ -23,11 +23,17 @@ public class SubjectService {
 //        this.subjectRepo=subjectRepo;
 //    }
 
-    public List<SubjectDto> getAllSubjects() {
-        return subjectRepo.findAll()
-                .stream()
-                .map(SubjectDto::convertEntityToDto)
-                .collect(Collectors.toList());
+    public ApiResponse getAllSubjects() {
+        ApiResponse apiResponse = new ApiResponse();
+//        subjectRepo.findAll()
+//                .stream()
+//                .map(SubjectDto::convertEntityToDto)
+//                .collect(Collectors.toList());
+        apiResponse.setError(null);
+        apiResponse.setStatus(200);
+        apiResponse.setData(subjectRepo.findAll());
+        return apiResponse;
+
     }
 
     public ApiResponse addSubject(SubjectDto subjectDto) {

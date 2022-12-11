@@ -14,7 +14,8 @@ public class SubjectController {
     private SubjectService subjectService;
 
     @GetMapping("/subjects")
-    public List<SubjectDto> getAllSubject() { //TODO RETURN HOBE API RESPONSE
+    public ApiResponse getAllSubject() { //TODO RETURN HOBE API RESPONSE
+
         return subjectService.getAllSubjects();
     }
 

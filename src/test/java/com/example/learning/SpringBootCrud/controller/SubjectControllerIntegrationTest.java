@@ -147,11 +147,3 @@ class SubjectControllerIntegrationTest {
                 .andExpect(jsonPath("$.error").value(nullValue()));
     }
 }
-
-
-
-//        this.mockMvc.perform(post("/subjects")).andDo(print())
-//                .andExpect(status().isOk()).andExpect((ResultMatcher) content().contentType("application/json;charset=UTF-8"))
-//                .andExpect(jsonPath("$.id").value("22"))
-//                .andExpect(jsonPath("$.name").value("myname"))
-//                .andExpect(jsonPath("$.email").value("em@gmail.com"));
