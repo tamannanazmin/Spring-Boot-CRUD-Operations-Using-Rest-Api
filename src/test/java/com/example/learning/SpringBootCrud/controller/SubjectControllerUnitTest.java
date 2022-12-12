@@ -302,9 +302,5 @@ class SubjectControllerUnitTest {
         assertThat(outputInJson).isEqualTo(apiResponse.getStatus());
     }
 
-    @Test
-    public void updateSubject() throws Exception {
-
-    }
 
 }

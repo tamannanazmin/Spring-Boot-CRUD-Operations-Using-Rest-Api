@@ -80,7 +80,7 @@ class SubjectControllerIntegrationTest {
     public void addSubject() throws Exception{
         Subject subject =Subject.builder()
                 .id("11")
-                .name("t")
+                .name("tama")
                 .email("k@gmail.com")
                 .build();
         ResultActions response = mockMvc.perform(post("/subjects")
