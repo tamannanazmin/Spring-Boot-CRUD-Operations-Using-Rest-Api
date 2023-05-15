@@ -10,6 +10,20 @@ sourceCompatibility = '17'
 
 repositories {
 	mavenCentral()
+//	maven {
+//		url "https://jitpack.io"
+//		credentials {
+//			username = "Tamanna Nazmin"
+//			password = "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"
+//		}
+//	}
+	/***maven {
+		url "https://jitpack.io"
+		credentials {
+			username = "Tamanna Nazmin"
+			password = "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"
+		}
+	}**/
 }
 
 dependencies {
@@ -17,8 +31,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//open ai
+	//implementation 'com.github.tamannanazmin:Django-Rest-Frameworks_CRUD:Tag'
+	//implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+	//implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'
+
+
     testImplementation 'junit:junit:4.13.1'
     runtimeOnly 'mysql:mysql-connector-java'
+
 	//lombok dependencies
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
@@ -32,6 +53,7 @@ dependencies {
 	testImplementation group: 'com.h2database', name: 'h2', version: '1.4.192'
 	//mockito
 	compileOnly group: 'org.mockito', name: 'mockito-core', version: '2.23.4'
+
 
 }
 

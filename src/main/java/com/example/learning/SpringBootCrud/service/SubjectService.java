@@ -7,6 +7,8 @@ import com.example.learning.SpringBootCrud.uniformResponse.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+//import ai.openai.OpenAI;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,24 @@ public class SubjectService {
     public SubjectRepository subjectRepo;
 //    public SubjectService(SubjectRepository subjectRepo){
 //        this.subjectRepo=subjectRepo;
+//    }
+
+
+
+//    //private final OpenAi api = new OpenAI(OpenAIConfig.API_KEY);
+//
+//    public String generateText(String prompt) {
+//        CompletionRequest request = new CompletionRequest.Builder()
+//                .prompt(prompt)
+//                .build();
+//
+//        try {
+//            CompletionResponse response = api.getCompletion(request);
+//            return response.getChoices().get(0).getText();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
 //    }
 
     public ApiResponse getAllSubjects() {
